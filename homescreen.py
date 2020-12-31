@@ -7,6 +7,7 @@ root = Tk()
 verify_menu = None
 verify_menu_add = None
 verify_menu_manager = None
+verify_menu_history = None
 
 
 class Home_Application():
@@ -32,7 +33,7 @@ class Home_Application():
 
         self.BtHistorico = ttk.Button(self.root)
         self.BtHistorico.place(x=490, y=10, width=156, height=45)
-        self.BtHistorico.configure(text='Historico')
+        self.BtHistorico.configure(text='Historico', command=self.historico_veiculo)
 
         self.BtConfig = ttk.Button(self.root)
         self.BtConfig.place(x=690, y=20, width=96, height=35)
@@ -189,6 +190,38 @@ class Home_Application():
         self.BtExcluirTree.place(x=160, y=10, width=126, height=35)
         self.BtExcluirTree.configure(text='Excluir Veiculo')
 
+    def historico_veiculo(self):
+        global verify_menu
+        global verify_menu_add
+        global verify_menu_manager
+        global verify_menu_history
+        print('History criada')
+        if verify_menu == True or verify_menu_add == True or verify_menu_manager == True:
+            self.FrInicio.destroy()
+            self.FrAdd_Veiculo.destroy()
+            self.FrManager_Veiculo.destroy()
+            verify_menu_history= True
+            print('Home & Add & History deletada')
+        else:
+            pass
 
+        self.FrHistory_Veiculo = Frame(self.root)
+        self.FrHistory_Veiculo.place(relx=0.013, rely=0.175)
+        self.FrHistory_Veiculo.configure(relief='groove', borderwidth="2",  height=325, width=776)
+
+        self.TreeHistory = ttk.Treeview(self.FrHistory_Veiculo, columns=(1, 2, 3, 4, 5, 6), show='headings')
+        self.TreeHistory.place(relx=0.026, rely=0.031, relheight=0.914, relwidth=0.956)
+        self.TreeHistory.heading(1, text="ID")
+        self.TreeHistory.heading(2, text='Nome')
+        self.TreeHistory.heading(3, text='Número Veiculo')
+        self.TreeHistory.heading(4, text='Telefone')
+        self.TreeHistory.heading(5, text='Hora de Entrada')
+        self.TreeHistory.heading(6, text='Hora de Saída')
+        self.TreeHistory.column(1, width=1)
+        self.TreeHistory.column(2, width=7)
+        self.TreeHistory.column(3, width=4)
+        self.TreeHistory.column(4, width=5)
+        self.TreeHistory.column(5, width=1)
+        self.TreeHistory.column(6, width=1)
 
 Home_Application()
