@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter.ttk as ttk
+import bd
 
 
 root = Tk()
@@ -27,7 +28,13 @@ class Login_Application():
         self.Bt_Login = ttk.Button(self.root)
         self.Bt_Login.place(relx=0.24, rely=0.682, relwidth=0.504, relheight=0.159)
         self.Bt_Login.configure(text='Login')
+        
+        self.VerifyUsuario = self.Entry_Usuario.get()
+        alt = bd.BD()
+        alt.conn_bd
 
         self.root.mainloop()
+
+
 
 Login_Application()
