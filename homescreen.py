@@ -6,7 +6,7 @@ root = Tk()
 
 verify_menu = None
 verify_menu_add = None
-
+verify_menu_manager = None
 
 
 class Home_Application():
@@ -28,7 +28,7 @@ class Home_Application():
 
         self.BtGerenciar = ttk.Button(self.root)
         self.BtGerenciar.place(x=330, y=10, width=156, height=45)
-        self.BtGerenciar.configure(text='Gerenciar Veiculos')
+        self.BtGerenciar.configure(text='Gerenciar Veiculos', command=self.manager_veiculo)
 
         self.BtHistorico = ttk.Button(self.root)
         self.BtHistorico.place(x=490, y=10, width=156, height=45)
@@ -151,5 +151,44 @@ class Home_Application():
         self.BtSalvarVeiculo = ttk.Button(self.FrAdd_Veiculo)
         self.BtSalvarVeiculo.place(relx=0.619, rely=0.892, width=140, height=30)
         self.BtSalvarVeiculo.configure(text='Salvar Veiculo')
-        
+
+    def manager_veiculo(self):
+        global verify_menu
+        global verify_menu_add
+        global verify_menu_manager
+        print('Manager criada')
+        if verify_menu == True or verify_menu_add == True:
+            self.FrInicio.destroy()
+            self.FrAdd_Veiculo.destroy()
+            verify_menu_manager = True
+            print('Home & Add deletada')
+        else:
+            pass
+        self.FrManager_Veiculo = Frame(self.root)
+        self.FrManager_Veiculo.place(relx=0.013, rely=0.175)
+        self.FrManager_Veiculo.configure(relief='groove', borderwidth="2",  height=325, width=776)
+
+        self.TreeManager = ttk.Treeview(self.FrManager_Veiculo, columns=(1, 2, 3, 4, 5), show='headings')
+        self.TreeManager.place(relx=0.026, rely=0.154, relheight=0.791, relwidth=0.956)
+        self.TreeManager.heading(1, text="ID")
+        self.TreeManager.heading(2, text='Nome')
+        self.TreeManager.heading(3, text='Número Veiculo')
+        self.TreeManager.heading(4, text='Telefone')
+        self.TreeManager.heading(5, text='Hora de Entrada')
+        self.TreeManager.column(1, width=1)
+        self.TreeManager.column(2, width=7)
+        self.TreeManager.column(3, width=4)
+        self.TreeManager.column(4, width=5)
+        self.TreeManager.column(5, width=1)
+
+        self.BtEditTree = ttk.Button(self.FrManager_Veiculo)
+        self.BtEditTree.place(x=20, y=10, width=126, height=35)
+        self.BtEditTree.configure(text='Editar Veiculo')
+
+        self.BtExcluirTree = ttk.Button(self.FrManager_Veiculo)
+        self.BtExcluirTree.place(x=160, y=10, width=126, height=35)
+        self.BtExcluirTree.configure(text='Excluir Veiculo')
+
+
+
 Home_Application()
