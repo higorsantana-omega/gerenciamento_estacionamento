@@ -63,5 +63,18 @@ def VeiculoDB():
     alt.persist()
     alt.desconectar_BD()
 
+def SlotDB():
+    alt = BD()
+    alt.conn_bd()
+    alt.execute_comand("""CREATE TABLE IF NOT EXISTS slot_table(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_veiculo INTEGER,
+            vazio_ou_nao NUMERIC,
+            FOREIGN KEY(id_veiculo) REFERENCES veiculo_table(id)
+        )""")
+    alt.persist()
+    alt.desconectar_BD()
+
 InitDB()
 VeiculoDB()
+SlotDB()
