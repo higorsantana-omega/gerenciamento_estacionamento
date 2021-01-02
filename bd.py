@@ -46,4 +46,22 @@ def InitDB():
     alt.persist()
     alt.desconectar_BD()
 
+def VeiculoDB():
+    alt = BD()
+    alt.conn_bd()
+    alt.execute_comand("""CREATE TABLE IF NOT EXISTS veiculo_table(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT,
+            telefone INTEGER,
+            placa TEXT,
+            data_entrada TEXT,
+            data_saida TEXT,
+            exit NUMERIC,
+            criado_em TEXT,
+            atualizado_em TEXT
+        )""")
+    alt.persist()
+    alt.desconectar_BD()
+
 InitDB()
+VeiculoDB()
