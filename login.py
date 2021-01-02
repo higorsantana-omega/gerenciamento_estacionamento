@@ -1,9 +1,12 @@
 from tkinter import *
 import tkinter.ttk as ttk
 import bd
-
+from homescreen import Home_Application
 
 root = Tk()
+
+Logado = False
+
 
 class Login_Application():
     def __init__(self):
@@ -27,14 +30,33 @@ class Login_Application():
 
         self.Bt_Login = ttk.Button(self.root)
         self.Bt_Login.place(relx=0.24, rely=0.682, relwidth=0.504, relheight=0.159)
-        self.Bt_Login.configure(text='Login')
-        
-        self.VerifyUsuario = self.Entry_Usuario.get()
-        alt = bd.BD()
-        alt.conn_bd
+        self.Bt_Login.configure(text='Login', command=self.Login_V)
 
         self.root.mainloop()
 
+    def Login_V(self):
+        global Logado
+        self.VerifyUsuario = self.Entry_Usuario.get()
+        self.VerifySenha = self.Entry_Senha.get()
+        alt = bd.BD()
+        alt.conn_bd()
+        alt.execute_comand("""
+        SELECT * FROM admin_table
+        WHERE (username = ? and password = ?)
+        """, (self.VerifyUsuario, self.VerifySenha))
+        print('Selecionado')
+        self.VerifyLogin = alt.cursor.fetchone()
+        try:
+            if (self.VerifyUsuario in self.VerifyLogin and self.VerifySenha in self.VerifyLogin):
+                print('Acesso Permitido')
+                Logado = True
+            else:
+                pass
+        except:
+            print('Acesso Negado')
 
+        if Logado == True:
+            self.root.destroy()
+            Home_Application()
 
-Login_Application()
+        
