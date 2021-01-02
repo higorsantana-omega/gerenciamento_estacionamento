@@ -1,5 +1,9 @@
+import sqlite3
+from funções import get_veiculo
 from tkinter import *
 import tkinter.ttk as ttk
+import bd
+from datetime import date, datetime
 
 
 root = Tk()
@@ -40,7 +44,6 @@ class Home_Application():
         self.BtConfig.configure(text='Configurações')
 
         self.root.mainloop()
-
 
     def inicio(self):
         green = '#5FED42'
@@ -148,10 +151,10 @@ class Home_Application():
         self.FrAdd_Telefone.configure(relief='groove', borderwidth="2",  height=75, width=450, text='Telefone')
         self.EntryAdd_Telefone = ttk.Entry(self.FrAdd_Telefone)
         self.EntryAdd_Telefone.place(relx=0.044, rely=0.4, relheight=0.333, relwidth=0.836)
-
+        
         self.BtSalvarVeiculo = ttk.Button(self.FrAdd_Veiculo)
         self.BtSalvarVeiculo.place(relx=0.619, rely=0.892, width=140, height=30)
-        self.BtSalvarVeiculo.configure(text='Salvar Veiculo')
+        self.BtSalvarVeiculo.configure(text='Salvar Veiculo', command=self.get_veiculo)
 
     def manager_veiculo(self):
         global verify_menu
@@ -224,4 +227,41 @@ class Home_Application():
         self.TreeHistory.column(5, width=1)
         self.TreeHistory.column(6, width=1)
 
-Home_Application()
+    def get_veiculo(self):
+        # Campos para inserir as informações do veiculo
+        self.nome = self.EntryAdd_Nome.get()
+        self.placa = self.EntryAdd_ID.get()
+        self.telefone = self.EntryAdd_Telefone.get()
+
+        # Data de registro no sistema
+        data_atual = datetime.now()
+        self.data_entrada = data_atual.strftime("%d/%m/%Y %H:%M")
+
+        # Verificar se o veiculo ainda está no estacionamento
+        self.exit = False
+
+        # Inserir informações no Banco de Dados
+        alt = bd.BD()
+        alt.conn_bd()
+        alt.execute_comand("INSERT INTO veiculo_table (nome, telefone, placa, data_entrada, exit, criado_em) values (?, ?, ?, ?, ?, ?)", (self.nome, self.placa, self.telefone, self.data_entrada, self.exit, self.data_entrada))
+        alt.persist()
+        alt.desconectar_BD()
+
+        self.EntryAdd_Nome.delete(0, 'end')
+        self.EntryAdd_ID.delete(0, 'end')
+        self.EntryAdd_Telefone.delete(0, 'end')
+
+        alt.conn_bd()
+        self.tree_manager = alt.execute_comand("SELECT * FROM veiculo_table ORDER BY id DESC")
+        self.tree_manager = list(self.tree_manager)
+        print(self.tree_manager)
+        self.TreeManager.insert('', 'end', values=self.tree_manager[0])
+        self.TreeManager.insert('', 'end', values=self.tree_manager[1])
+        self.TreeManager.insert('', 'end', values=self.tree_manager[3])
+        self.TreeManager.insert('', 'end', values=self.tree_manager[2])
+        self.TreeManager.insert('', 'end', values=self.tree_manager[4])
+        alt.desconectar_BD()
+
+
+    def get_manager(self):
+        pass
