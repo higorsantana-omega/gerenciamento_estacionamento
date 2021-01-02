@@ -1,7 +1,6 @@
 from tkinter import *
 import tkinter.ttk as ttk
 import bd
-from homescreen import Home_Application
 
 root = Tk()
 
@@ -57,6 +56,7 @@ class Login_Application():
 
         if Logado == True:
             self.root.destroy()
+            from homescreen import Home_Application
             Home_Application()
 
         
