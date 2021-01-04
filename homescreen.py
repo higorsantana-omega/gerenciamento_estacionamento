@@ -297,11 +297,18 @@ class Home_Application():
         EntryTelefone.insert(0, telefone_sel)
 
         # Editar check
+        Checkstatus = int(self.Manager_tree.item(self.Manager_tree.selection())['values'][6])
+        CheckVariavel = IntVar()
+        if Checkstatus == 0:
+            CheckVariavel.set(2)
+        else:
+            CheckVariavel.set(1)
+                
         LbCheck = LabelFrame(editar_window, text='Está no estacionamento?')
         LbCheck.place(x=360, y=50, width=160, height=45)
-        CheckSim = ttk.Radiobutton(LbCheck, text='Sim')
+        CheckSim = Radiobutton(LbCheck, text='Sim', variable=CheckVariavel, value=1)
         CheckSim.place(x=10, y=0, width=59, height=20)
-        CheckNao = ttk.Radiobutton(LbCheck, text='Não')
+        CheckNao = Radiobutton(LbCheck, text='Não', variable=CheckVariavel, value=2)
         CheckNao.place(x=80, y=0, width=59, height=20)
 
         # Data de entrada
@@ -333,6 +340,9 @@ class Home_Application():
         BtSalvar.place(x=10, y=170, width=95, height=25)
         BtCancelar = Button(editar_window, text='Cancelar', background='#fb4a4a')
         BtCancelar.place(x=110, y=170, width=95, height=25)
+
+        # if CheckSim is 
+        
 
         alt = bd.BD()
         alt.conn_bd()
