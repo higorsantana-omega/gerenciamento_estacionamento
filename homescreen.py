@@ -1,5 +1,4 @@
 import sqlite3
-from funções import get_veiculo
 from tkinter import *
 import tkinter.ttk as ttk
 import bd
@@ -172,18 +171,18 @@ class Home_Application():
         self.FrManager_Veiculo.place(relx=0.013, rely=0.175)
         self.FrManager_Veiculo.configure(relief='groove', borderwidth="2",  height=325, width=776)
 
-        self.TreeManager = ttk.Treeview(self.FrManager_Veiculo, columns=(1, 2, 3, 4, 5), show='headings')
-        self.TreeManager.place(relx=0.026, rely=0.154, relheight=0.791, relwidth=0.956)
-        self.TreeManager.heading(1, text="ID")
-        self.TreeManager.heading(2, text='Nome')
-        self.TreeManager.heading(3, text='Número Veiculo')
-        self.TreeManager.heading(4, text='Telefone')
-        self.TreeManager.heading(5, text='Hora de Entrada')
-        self.TreeManager.column(1, width=1)
-        self.TreeManager.column(2, width=7)
-        self.TreeManager.column(3, width=4)
-        self.TreeManager.column(4, width=5)
-        self.TreeManager.column(5, width=1)
+        self.Manager_tree = ttk.Treeview(self.FrManager_Veiculo, columns=(1, 2, 3, 4, 5), show='headings')
+        self.Manager_tree.place(relx=0.026, rely=0.154, relheight=0.791, relwidth=0.956)
+        self.Manager_tree.heading(1, text="ID")
+        self.Manager_tree.heading(2, text='Nome')
+        self.Manager_tree.heading(3, text='Telefone')
+        self.Manager_tree.heading(4, text='Número Veiculo')
+        self.Manager_tree.heading(5, text='Hora de Entrada')
+        self.Manager_tree.column(1, width=1)
+        self.Manager_tree.column(2, width=7)
+        self.Manager_tree.column(3, width=4)
+        self.Manager_tree.column(4, width=5)
+        self.Manager_tree.column(5, width=1)
 
         self.BtEditTree = ttk.Button(self.FrManager_Veiculo)
         self.BtEditTree.place(x=20, y=10, width=126, height=35)
@@ -192,6 +191,16 @@ class Home_Application():
         self.BtExcluirTree = ttk.Button(self.FrManager_Veiculo)
         self.BtExcluirTree.place(x=160, y=10, width=126, height=35)
         self.BtExcluirTree.configure(text='Excluir Veiculo')
+
+        alt = bd.BD()
+        alt.conn_bd()
+        alt.execute_comand("SELECT * FROM veiculo_table ORDER BY id")
+        re = alt.fetchall_comand()
+
+        for row in re:
+            self.Manager_tree.insert('', 'end', values=row)
+        
+        alt.desconectar_BD()
 
     def historico_veiculo(self):
         global verify_menu
@@ -238,7 +247,7 @@ class Home_Application():
         self.data_entrada = data_atual.strftime("%d/%m/%Y %H:%M")
 
         # Verificar se o veiculo ainda está no estacionamento
-        self.exit = False
+        self.exit = 0
 
         # Inserir informações no Banco de Dados
         alt = bd.BD()
@@ -250,18 +259,6 @@ class Home_Application():
         self.EntryAdd_Nome.delete(0, 'end')
         self.EntryAdd_ID.delete(0, 'end')
         self.EntryAdd_Telefone.delete(0, 'end')
-
-        alt.conn_bd()
-        self.tree_manager = alt.execute_comand("SELECT * FROM veiculo_table ORDER BY id DESC")
-        self.tree_manager = list(self.tree_manager)
-        print(self.tree_manager)
-        self.TreeManager.insert('', 'end', values=self.tree_manager[0])
-        self.TreeManager.insert('', 'end', values=self.tree_manager[1])
-        self.TreeManager.insert('', 'end', values=self.tree_manager[3])
-        self.TreeManager.insert('', 'end', values=self.tree_manager[2])
-        self.TreeManager.insert('', 'end', values=self.tree_manager[4])
-        alt.desconectar_BD()
-
 
     def get_manager(self):
         pass
