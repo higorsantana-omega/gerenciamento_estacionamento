@@ -263,3 +263,66 @@ class Home_Application():
     def editar_manager(self):
         sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][0]
         print(sel)
+
+        editar_window = Toplevel(self.root)
+        editar_window.geometry('600x200')
+
+        # Editar nome
+        LbNome = LabelFrame(editar_window, text='Nome')
+        LbNome.place(x=10, y=0, width=330, height=45)
+        EntryNome = ttk.Entry(LbNome)
+        EntryNome.place(x=10, y=0, width=306, height=20)
+
+        # Editar placa
+        LbPlaca = LabelFrame(editar_window, text='Placa')
+        LbPlaca.place(x=360, y=0, width=160, height=45)
+        EntryPlaca = ttk.Entry(LbPlaca)
+        EntryPlaca.place(x=10, y=0, width=136, height=20)
+
+        # Editar telefone
+        LbTelefone = LabelFrame(editar_window, text='Telefone')
+        LbTelefone.place(x=10, y=50, width=330, height=45)
+        EntryTelefone = ttk.Entry(LbTelefone)
+        EntryTelefone.place(x=10, y=0, width=306, height=20)
+
+        # Editar check
+        LbCheck = LabelFrame(editar_window, text='Está no estacionamento?')
+        LbCheck.place(x=360, y=50, width=160, height=45)
+        CheckSim = ttk.Radiobutton(LbCheck, text='Sim')
+        CheckSim.place(x=10, y=0, width=59, height=20)
+        CheckNao = ttk.Radiobutton(LbCheck, text='Não')
+        CheckNao.place(x=80, y=0, width=59, height=20)
+
+        # Data de entrada
+        LbEntrada = LabelFrame(editar_window, text='Data de entrada')
+        LbEntrada.place(x=10, y=120, width=150, height=45)
+        EntryEntrada = Label(LbEntrada, text='Null')
+        EntryEntrada.place(x=10, y=0, width=115, height=20)
+
+        # Data de saída
+        LbSaida = LabelFrame(editar_window, text='Data de saída')
+        LbSaida.place(x=170, y=120, width=150, height=45)
+        EntrySaida = Label(LbSaida, text='Null')
+        EntrySaida.place(x=10, y=0, width=115, height=20)
+
+        # Criado em
+        LbCriado = LabelFrame(editar_window, text='Criado em')
+        LbCriado.place(x=330, y=120, width=130, height=45)
+        EntryCriado = Label(LbCriado, text='Null')
+        EntryCriado.place(x=10, y=0, width=100, height=20)
+
+        # Atualizado em
+        LbEntrada = LabelFrame(editar_window, text='Atualizado em')
+        LbEntrada.place(x=470, y=120, width=120, height=45)
+        EntryEntrada = Label(LbEntrada, text='Null')
+        EntryEntrada.place(x=10, y=0, width=95, height=20)
+
+        # Botão Salvar/Cancelar
+        BtSalvar = Button(editar_window, text='Salvar', background='#53dd00')
+        BtSalvar.place(x=10, y=170, width=95, height=25)
+        BtCancelar = Button(editar_window, text='Cancelar', background='#fb4a4a')
+        BtCancelar.place(x=110, y=170, width=95, height=25)
+
+
+        editar_window.mainloop()
+
