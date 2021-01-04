@@ -7,6 +7,7 @@ from datetime import date, datetime
 
 root = Tk()
 
+# Variaveis para verificar se está em algum menu
 verify_menu = None
 verify_menu_add = None
 verify_menu_manager = None
@@ -14,38 +15,49 @@ verify_menu_history = None
 
 
 class Home_Application():
+    # Construtor
     def __init__(self):
+        # Configurações da janela
         self.root = root
         self.root.geometry("800x400")
-        self.root.title("Home")
+        self.root.title("Home") 
 
+        # Separador tkinter
         self.TSeparator = ttk.Separator(self.root)
         self.TSeparator.place(x=0, y=60, width=800)
 
+        # Botão tela home
         self.BtInicio = ttk.Button(self.root)
         self.BtInicio.place(x=10, y=10, width=156, height=45)
         self.BtInicio.configure(text='Início', command=self.inicio)
 
+        # Botão tela adicionar veiculo
         self.BtAdd = ttk.Button(self.root)
         self.BtAdd.place(x=170, y=10, width=156, height=45)
         self.BtAdd.configure(text='Adicionar Veiculo', command=self.add_veiculo)
 
+        # Botão tela gerenciar veiculos
         self.BtGerenciar = ttk.Button(self.root)
         self.BtGerenciar.place(x=330, y=10, width=156, height=45)
         self.BtGerenciar.configure(text='Gerenciar Veiculos', command=self.manager_veiculo)
 
+        # Botão tela historico
         self.BtHistorico = ttk.Button(self.root)
         self.BtHistorico.place(x=490, y=10, width=156, height=45)
         self.BtHistorico.configure(text='Historico', command=self.historico_veiculo)
 
+        # Botão tela configurações
         self.BtConfig = ttk.Button(self.root)
         self.BtConfig.place(x=690, y=20, width=96, height=35)
         self.BtConfig.configure(text='Configurações')
 
         self.root.mainloop()
 
+    # Tela home
     def inicio(self):
+        # Cor dos slots
         green = '#5FED42'
+        # Verificação de menu
         global verify_menu
         global verify_menu_add
         verify_menu = True
@@ -55,10 +67,13 @@ class Home_Application():
             print('Add deletada')
         else:
             pass
+
+        # Frames para os slots
         self.FrInicio = Frame(self.root)
         self.FrInicio.place(relx=0.013, rely=0.175)
         self.FrInicio.configure(relief='groove', borderwidth="2",  height=325, width=776)
 
+        # Slots
         self.Slot1 = Frame(self.FrInicio)
         self.Slot1.place(relx=0.026, rely=0.062)
         self.Slot1.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
@@ -119,7 +134,9 @@ class Home_Application():
         self.Slot15.place(relx=0.799, rely=0.677)
         self.Slot15.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
 
+    # Tela adicionar veiculo
     def add_veiculo(self):
+        # Verificação do menu
         global verify_menu
         global verify_menu_add
         print('Add criada')
@@ -129,6 +146,8 @@ class Home_Application():
             print('Home deletada')
         else:
             pass
+
+        # Frames e Entrys
         self.FrAdd_Veiculo = Frame(self.root)
         self.FrAdd_Veiculo.place(relx=0.013, rely=0.175)
         self.FrAdd_Veiculo.configure(relief='groove', borderwidth="2",  height=325, width=776)
@@ -151,11 +170,14 @@ class Home_Application():
         self.EntryAdd_Telefone = ttk.Entry(self.FrAdd_Telefone)
         self.EntryAdd_Telefone.place(relx=0.044, rely=0.4, relheight=0.333, relwidth=0.836)
         
+        # Botão para salvar no banco de dados as informações
         self.BtSalvarVeiculo = ttk.Button(self.FrAdd_Veiculo)
         self.BtSalvarVeiculo.place(relx=0.619, rely=0.892, width=140, height=30)
         self.BtSalvarVeiculo.configure(text='Salvar Veiculo', command=self.get_veiculo)
 
+    # Tela gerenciar veiculos
     def manager_veiculo(self):
+        # Verificação do menu
         global verify_menu
         global verify_menu_add
         global verify_menu_manager
@@ -167,10 +189,13 @@ class Home_Application():
             print('Home & Add deletada')
         else:
             pass
+
+        # Frame
         self.FrManager_Veiculo = Frame(self.root)
         self.FrManager_Veiculo.place(relx=0.013, rely=0.175)
         self.FrManager_Veiculo.configure(relief='groove', borderwidth="2",  height=325, width=776)
 
+        # Treeview
         self.Manager_tree = ttk.Treeview(self.FrManager_Veiculo, columns=(1, 2, 3, 4, 5), show='headings')
         self.Manager_tree.place(relx=0.026, rely=0.154, relheight=0.791, relwidth=0.956)
         self.Manager_tree.heading(1, text="ID")
@@ -184,6 +209,7 @@ class Home_Application():
         self.Manager_tree.column(4, width=5)
         self.Manager_tree.column(5, width=1)
 
+        # Botões editar e excluir
         self.BtEditTree = ttk.Button(self.FrManager_Veiculo)
         self.BtEditTree.place(x=20, y=10, width=126, height=35)
         self.BtEditTree.configure(text='Editar Veiculo', command=self.editar_manager)
@@ -192,17 +218,22 @@ class Home_Application():
         self.BtExcluirTree.place(x=160, y=10, width=126, height=35)
         self.BtExcluirTree.configure(text='Excluir Veiculo')
 
+        # Conectar-se ao banco de dados e selecionar tudo o que estiver na tabela
         alt = bd.BD()
         alt.conn_bd()
         alt.execute_comand("SELECT * FROM veiculo_table ORDER BY id")
         re = alt.fetchall_comand()
 
+        # Inserir os dados da tabela no treeview
         for row in re:
             self.Manager_tree.insert('', 'end', values=row)
-        
+
+        # Desconectar do banco de dados
         alt.desconectar_BD()
 
+    # Tela historico dos veiculos
     def historico_veiculo(self):
+        # Verificação do menu
         global verify_menu
         global verify_menu_add
         global verify_menu_manager
@@ -217,10 +248,12 @@ class Home_Application():
         else:
             pass
 
+        # Frame
         self.FrHistory_Veiculo = Frame(self.root)
         self.FrHistory_Veiculo.place(relx=0.013, rely=0.175)
         self.FrHistory_Veiculo.configure(relief='groove', borderwidth="2",  height=325, width=776)
 
+        # Treeview de historico
         self.TreeHistory = ttk.Treeview(self.FrHistory_Veiculo, columns=(1, 2, 3, 4, 5, 6), show='headings')
         self.TreeHistory.place(relx=0.026, rely=0.031, relheight=0.914, relwidth=0.956)
         self.TreeHistory.heading(1, text="ID")
@@ -236,6 +269,7 @@ class Home_Application():
         self.TreeHistory.column(5, width=1)
         self.TreeHistory.column(6, width=1)
 
+    # Função para inserir veiculos no banco de dados
     def get_veiculo(self):
         # Campos para inserir as informações do veiculo
         self.nome = self.EntryAdd_Nome.get()
@@ -256,14 +290,18 @@ class Home_Application():
         alt.persist()
         alt.desconectar_BD()
 
+        # Deletar as entrys após dar commit no banco de dados
         self.EntryAdd_Nome.delete(0, 'end')
         self.EntryAdd_ID.delete(0, 'end')
         self.EntryAdd_Telefone.delete(0, 'end')
 
+    # Função para gerenciar os veiculos
     def editar_manager(self):
+        # Selecionar da treeview e banco
         sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][0]
         print(sel)
 
+        # Variaveis relacionadas ao veiculo selecionado no treeview
         nome_sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][1]
         placa_sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][3]
         telefone_sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][2]
@@ -272,6 +310,7 @@ class Home_Application():
         criado_sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][7]
         atualizado_sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][8]
 
+        # Criar janela TopLevel
         editar_window = Toplevel(self.root)
         editar_window.geometry('600x200')
 
@@ -296,14 +335,15 @@ class Home_Application():
         EntryTelefone.place(x=10, y=0, width=306, height=20)
         EntryTelefone.insert(0, telefone_sel)
 
-        # Editar check
+        # Verificar se o "exit" do banco está como 0 ou 1
         Checkstatus = int(self.Manager_tree.item(self.Manager_tree.selection())['values'][6])
         CheckVariavel = IntVar()
         if Checkstatus == 0:
             CheckVariavel.set(2)
         else:
             CheckVariavel.set(1)
-                
+        
+        # Editar check
         LbCheck = LabelFrame(editar_window, text='Está no estacionamento?')
         LbCheck.place(x=360, y=50, width=160, height=45)
         CheckSim = Radiobutton(LbCheck, text='Sim', variable=CheckVariavel, value=1)
@@ -341,11 +381,5 @@ class Home_Application():
         BtCancelar = Button(editar_window, text='Cancelar', background='#fb4a4a')
         BtCancelar.place(x=110, y=170, width=95, height=25)
 
-        # if CheckSim is 
-        
-
-        alt = bd.BD()
-        alt.conn_bd()
-
+        # Manter janela aberta
         editar_window.mainloop()
-
