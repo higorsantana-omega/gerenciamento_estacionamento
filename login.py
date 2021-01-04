@@ -29,7 +29,7 @@ class Login_Application():
         self.Lb_Senha.place(relx=0.04, rely=0.364, height=20, width=111)
         self.Lb_Senha.configure(text="Senha do Admin")
         
-        self.Entry_Senha = ttk.Entry(self.root)
+        self.Entry_Senha = ttk.Entry(self.root, show='*')
         self.Entry_Senha.place(relx=0.04, rely=0.455, relheight=0.114, relwidth=0.92)
 
         # Botão para logar no sistema
@@ -77,5 +77,3 @@ class Login_Application():
             self.root.destroy()
             from homescreen import Home_Application
             Home_Application()
-
-        
