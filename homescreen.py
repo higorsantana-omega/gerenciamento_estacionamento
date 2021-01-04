@@ -186,7 +186,7 @@ class Home_Application():
 
         self.BtEditTree = ttk.Button(self.FrManager_Veiculo)
         self.BtEditTree.place(x=20, y=10, width=126, height=35)
-        self.BtEditTree.configure(text='Editar Veiculo')
+        self.BtEditTree.configure(text='Editar Veiculo', command=self.editar_manager)
 
         self.BtExcluirTree = ttk.Button(self.FrManager_Veiculo)
         self.BtExcluirTree.place(x=160, y=10, width=126, height=35)
@@ -260,5 +260,6 @@ class Home_Application():
         self.EntryAdd_ID.delete(0, 'end')
         self.EntryAdd_Telefone.delete(0, 'end')
 
-    def get_manager(self):
-        pass
+    def editar_manager(self):
+        sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][0]
+        print(sel)
