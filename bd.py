@@ -26,6 +26,9 @@ class BD():
             return (True,)
         else:
             return str(False)
+
+    def fetchall_comand(self):
+        return BD.cursor.fetchall()
         
     # Efetivar alterações
     def persist(self):
@@ -56,7 +59,7 @@ def VeiculoDB():
             placa TEXT,
             data_entrada TEXT,
             data_saida TEXT,
-            exit NUMERIC,
+            exit INTEGER,
             criado_em TEXT,
             atualizado_em TEXT
         )""")
