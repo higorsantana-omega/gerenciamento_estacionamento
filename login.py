@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 import tkinter.ttk as ttk
 import bd
 
@@ -70,6 +71,9 @@ class Login_Application():
         except:
             # Acesso recusado
             print('Acesso Negado')
+            Logado = False
+            messagebox.showerror(title='Erro', message='Usuário ou senha está incorreto.')
+            
 
         # Após logar com exito
         if Logado == True:
