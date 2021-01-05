@@ -217,7 +217,7 @@ class Home_Application():
 
         self.BtExcluirTree = ttk.Button(self.FrManager_Veiculo)
         self.BtExcluirTree.place(x=160, y=10, width=126, height=35)
-        self.BtExcluirTree.configure(text='Excluir Veiculo')
+        self.BtExcluirTree.configure(text='Excluir Veiculo', command=self.excluir_veiculo)
 
         self.atualizar_tree()
 
@@ -402,6 +402,26 @@ class Home_Application():
         except:
             messagebox.showerror(title='Erro', message='Ocorreu um erro ao se conectar com o banco de dados')
 
+        self.atualizar_tree()
+
+    # Excluir veiculo do banco de dados
+    def excluir_veiculo(self):
+        # Excluir veiculo selecionado
+        sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][0]
+
+        # Tentar conectar-se ao banco de dados
+        try:
+            # Conectar-se ao banco
+            alt = bd.BD()
+            alt.conn_bd()
+            alt.execute_comand("DELETE FROM veiculo_table WHERE id = ? ", (sel,))
+            alt.persist()
+            alt.desconectar_BD()
+            messagebox.showinfo(title='Deletado', message='Veiculo deletado com sucesso.')
+        except:
+            messagebox.showerror(title='Erro', message='Ocorreu um erro tentar deletar o veiculo')
+
+        # Atualizar Tree
         self.atualizar_tree()
 
     # Atualizar a tree quando necessario
