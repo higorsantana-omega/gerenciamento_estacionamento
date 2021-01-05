@@ -298,8 +298,7 @@ class Home_Application():
     # Função para gerenciar os veiculos
     def editar_manager(self):
         # Selecionar da treeview e banco
-        sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][0]
-        print(sel)
+        self.sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][0]
 
         # Variaveis relacionadas ao veiculo selecionado no treeview
         nome_sel = self.Manager_tree.item(self.Manager_tree.selection())['values'][1]
@@ -317,69 +316,93 @@ class Home_Application():
         # Editar nome
         LbNome = LabelFrame(editar_window, text='Nome')
         LbNome.place(x=10, y=0, width=330, height=45)
-        EntryNome = ttk.Entry(LbNome)
-        EntryNome.place(x=10, y=0, width=306, height=20)
-        EntryNome.insert(0, nome_sel)
+        self.EntryNome = ttk.Entry(LbNome)
+        self.EntryNome.place(x=10, y=0, width=306, height=20)
+        self.EntryNome.insert(0, nome_sel)
 
         # Editar placa
         LbPlaca = LabelFrame(editar_window, text='Placa')
         LbPlaca.place(x=360, y=0, width=160, height=45)
-        EntryPlaca = ttk.Entry(LbPlaca)
-        EntryPlaca.place(x=10, y=0, width=136, height=20)
-        EntryPlaca.insert(0, placa_sel)
+        self.EntryPlaca = ttk.Entry(LbPlaca)
+        self.EntryPlaca.place(x=10, y=0, width=136, height=20)
+        self.EntryPlaca.insert(0, placa_sel)
 
         # Editar telefone
         LbTelefone = LabelFrame(editar_window, text='Telefone')
         LbTelefone.place(x=10, y=50, width=330, height=45)
-        EntryTelefone = ttk.Entry(LbTelefone)
-        EntryTelefone.place(x=10, y=0, width=306, height=20)
-        EntryTelefone.insert(0, telefone_sel)
+        self.EntryTelefone = ttk.Entry(LbTelefone)
+        self.EntryTelefone.place(x=10, y=0, width=306, height=20)
+        self.EntryTelefone.insert(0, telefone_sel)
 
         # Verificar se o "exit" do banco está como 0 ou 1
         Checkstatus = int(self.Manager_tree.item(self.Manager_tree.selection())['values'][6])
-        CheckVariavel = IntVar()
+        self.CheckVariavel = IntVar()
         if Checkstatus == 0:
-            CheckVariavel.set(2)
+            self.CheckVariavel.set(0)
         else:
-            CheckVariavel.set(1)
+            self.CheckVariavel.set(1)
         
         # Editar check
         LbCheck = LabelFrame(editar_window, text='Está no estacionamento?')
         LbCheck.place(x=360, y=50, width=160, height=45)
-        CheckSim = Radiobutton(LbCheck, text='Sim', variable=CheckVariavel, value=1)
-        CheckSim.place(x=10, y=0, width=59, height=20)
-        CheckNao = Radiobutton(LbCheck, text='Não', variable=CheckVariavel, value=2)
-        CheckNao.place(x=80, y=0, width=59, height=20)
+        self.CheckSim = Radiobutton(LbCheck, text='Sim', variable=self.CheckVariavel, value=1)
+        self.CheckSim.place(x=10, y=0, width=59, height=20)
+        self.CheckNao = Radiobutton(LbCheck, text='Não', variable=self.CheckVariavel, value=0)
+        self.CheckNao.place(x=80, y=0, width=59, height=20)
 
         # Data de entrada
         LbEntrada = LabelFrame(editar_window, text='Data de entrada')
         LbEntrada.place(x=10, y=120, width=150, height=45)
-        EntryEntrada = Label(LbEntrada, text=entrada_sel)
-        EntryEntrada.place(x=10, y=0, width=115, height=20)
+        self.EntryEntrada = Label(LbEntrada, text=entrada_sel)
+        self.EntryEntrada.place(x=10, y=0, width=115, height=20)
 
         # Data de saída
         LbSaida = LabelFrame(editar_window, text='Data de saída')
         LbSaida.place(x=170, y=120, width=150, height=45)
-        EntrySaida = Label(LbSaida, text=saida_sel)
-        EntrySaida.place(x=10, y=0, width=115, height=20)
+        self.EntrySaida = Label(LbSaida, text=saida_sel)
+        self.EntrySaida.place(x=10, y=0, width=115, height=20)
 
         # Criado em
         LbCriado = LabelFrame(editar_window, text='Criado em')
         LbCriado.place(x=330, y=120, width=130, height=45)
-        EntryCriado = Label(LbCriado, text=criado_sel)
-        EntryCriado.place(x=10, y=0, width=100, height=20)
+        self.EntryCriado = Label(LbCriado, text=criado_sel)
+        self.EntryCriado.place(x=10, y=0, width=100, height=20)
 
         # Atualizado em
         LbEntrada = LabelFrame(editar_window, text='Atualizado em')
         LbEntrada.place(x=470, y=120, width=120, height=45)
-        EntryEntrada = Label(LbEntrada, text=atualizado_sel)
-        EntryEntrada.place(x=10, y=0, width=95, height=20)
+        self.EntryEntrada = Label(LbEntrada, text=atualizado_sel)
+        self.EntryEntrada.place(x=10, y=0, width=95, height=20)
 
         # Botão Salvar/Cancelar
-        BtSalvar = Button(editar_window, text='Salvar', background='#53dd00')
+        BtSalvar = Button(editar_window, text='Salvar', background='#53dd00', command=self.salvar_configs)
         BtSalvar.place(x=10, y=170, width=95, height=25)
-        BtCancelar = Button(editar_window, text='Cancelar', background='#fb4a4a')
-        BtCancelar.place(x=110, y=170, width=95, height=25)
+        self.BtCancelar = Button(editar_window, text='Cancelar', background='#fb4a4a')
+        self.BtCancelar.place(x=110, y=170, width=95, height=25)
 
         # Manter janela aberta
         editar_window.mainloop()
+
+    # Função para salvar
+    def salvar_configs(self):
+        # Data em que foi atualizado
+        atualizado = datetime.now()
+        atualizado_em = atualizado.strftime("%d/%m/%Y %H:%M")
+        
+        # gets
+        nome_get = self.EntryNome.get()
+        telefone_get = self.EntryTelefone.get()
+        placa_get = self.EntryPlaca.get()
+        exit_get = self.CheckVariavel.get()
+
+        # Conectar-se ao banco de dados e inserir novos dados
+        alt = bd.BD()
+        alt.conn_bd()
+        alt.execute_comand("""
+        UPDATE veiculo_table
+        SET nome = ?, telefone = ?, placa = ?, exit = ?, atualizado_em = ?
+        WHERE id = ?
+        """, (nome_get, telefone_get, placa_get,
+            exit_get, atualizado_em, self.sel))
+        alt.persist()
+        alt.desconectar_BD()
