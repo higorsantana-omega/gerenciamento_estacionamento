@@ -218,18 +218,7 @@ class Home_Application():
         self.BtExcluirTree.place(x=160, y=10, width=126, height=35)
         self.BtExcluirTree.configure(text='Excluir Veiculo')
 
-        # Conectar-se ao banco de dados e selecionar tudo o que estiver na tabela
-        alt = bd.BD()
-        alt.conn_bd()
-        alt.execute_comand("SELECT * FROM veiculo_table ORDER BY id")
-        re = alt.fetchall_comand()
-
-        # Inserir os dados da tabela no treeview
-        for row in re:
-            self.Manager_tree.insert('', 'end', values=row)
-
-        # Desconectar do banco de dados
-        alt.desconectar_BD()
+        self.atualizar_tree()
 
     # Tela historico dos veiculos
     def historico_veiculo(self):
@@ -405,4 +394,25 @@ class Home_Application():
         """, (nome_get, telefone_get, placa_get,
             exit_get, atualizado_em, self.sel))
         alt.persist()
+        alt.desconectar_BD()
+
+        self.atualizar_tree()
+
+    # Atualizar a tree quando necessario
+    def atualizar_tree(self):
+        # Apagar o que está antes da atualização
+        for i in self.Manager_tree.get_children():
+            self.Manager_tree.delete(i)
+        
+        # Conectar-se ao banco de dados e selecionar tudo o que estiver na tabela
+        alt = bd.BD()
+        alt.conn_bd()
+        alt.execute_comand("SELECT * FROM veiculo_table ORDER BY id")
+        re = alt.fetchall_comand()
+
+        # Inserir os dados da tabela no treeview
+        for row in re:
+            self.Manager_tree.insert('', 'end', values=row)
+
+        # Desconectar do banco de dados
         alt.desconectar_BD()
