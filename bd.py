@@ -97,7 +97,7 @@ def Slot_Disponivel():
     alt.desconectar_BD()
     print(data)
     if len(data) > 0:
-        return data[0][0]
+        return data[0]
     else:
         return False
 
