@@ -14,6 +14,8 @@ verify_menu_add = None
 verify_menu_manager = None
 verify_menu_history = None
 
+CheckVariavel = IntVar()
+
 
 class Home_Application():
     # Construtor
@@ -75,9 +77,13 @@ class Home_Application():
         self.FrInicio.configure(relief='groove', borderwidth="2",  height=325, width=776)
 
         # Slots
+        global bg1
+        bg1 = 'green'
         self.Slot1 = Frame(self.FrInicio)
         self.Slot1.place(relx=0.026, rely=0.062)
-        self.Slot1.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
+        self.Slot1.configure(relief='groove', borderwidth="2", width=125, height=75, bg=bg1)
+        global Slot1_Dispo
+        Slot1_Dispo = 0
 
         self.Slot2 = Frame(self.FrInicio)
         self.Slot2.place(relx=0.219, rely=0.062)
@@ -134,6 +140,8 @@ class Home_Application():
         self.Slot15 = Frame(self.FrInicio)
         self.Slot15.place(relx=0.799, rely=0.677)
         self.Slot15.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
+
+
 
     # Tela adicionar veiculo
     def add_veiculo(self):
@@ -270,20 +278,33 @@ class Home_Application():
         data_atual = datetime.now()
         self.data_entrada = data_atual.strftime("%d/%m/%Y %H:%M")
 
-        # Verificar se o veiculo ainda está no estacionamento
-        self.exit = 0
+        # Definir que o veiculo está no estacionamento
+        global CheckVariavel
+        CheckVariavel.set(1)
+        exit_veiculo = CheckVariavel.get()
 
-        # Inserir informações no Banco de Dados
-        alt = bd.BD()
-        alt.conn_bd()
-        alt.execute_comand("INSERT INTO veiculo_table (nome, telefone, placa, data_entrada, exit, criado_em) values (?, ?, ?, ?, ?, ?)", (self.nome, self.placa, self.telefone, self.data_entrada, self.exit, self.data_entrada))
-        alt.persist()
-        alt.desconectar_BD()
-
-        # Deletar as entrys após dar commit no banco de dados
-        self.EntryAdd_Nome.delete(0, 'end')
-        self.EntryAdd_ID.delete(0, 'end')
-        self.EntryAdd_Telefone.delete(0, 'end')
+        spacid = bd.Slot_Disponivel()
+        if spacid:
+            # Inserir informações no Banco de Dados
+            alt = bd.BD()
+            alt.conn_bd()
+            alt.execute_comand("INSERT INTO veiculo_table (nome, telefone, placa, data_entrada, exit, criado_em) values (?, ?, ?, ?, ?, ?)", (self.nome, self.placa, self.telefone, self.data_entrada, exit_veiculo, self.data_entrada))
+            alt.persist()
+            alt.execute_comand("UPDATE slot_table SET id_veiculo=?, vazio_ou_nao='0' WHERE id = ?", (self.placa, str(spacid)))
+            alt.persist()
+            alt.desconectar_BD()
+            print('deu')
+            # Deletar as entrys após dar commit no banco de dados
+            self.EntryAdd_Nome.delete(0, 'end')
+            self.EntryAdd_ID.delete(0, 'end')
+            self.EntryAdd_Telefone.delete(0, 'end')
+            return True
+        else:
+            # Deletar as entrys após dar commit no banco de dados
+            self.EntryAdd_Nome.delete(0, 'end')
+            self.EntryAdd_ID.delete(0, 'end')
+            self.EntryAdd_Telefone.delete(0, 'end')
+            return print('Sem espaço')
 
     # Função para gerenciar os veiculos
     def editar_manager(self):
@@ -326,18 +347,18 @@ class Home_Application():
 
         # Verificar se o "exit" do banco está como 0 ou 1
         Checkstatus = int(self.Manager_tree.item(self.Manager_tree.selection())['values'][6])
-        self.CheckVariavel = IntVar()
+        global CheckVariavel
         if Checkstatus == 0:
-            self.CheckVariavel.set(0)
+            CheckVariavel.set(0)
         else:
-            self.CheckVariavel.set(1)
+            CheckVariavel.set(1)
         
         # Editar check
         LbCheck = LabelFrame(self.editar_window, text='Está no estacionamento?')
         LbCheck.place(x=360, y=50, width=160, height=45)
-        self.CheckSim = Radiobutton(LbCheck, text='Sim', variable=self.CheckVariavel, value=1)
+        self.CheckSim = Radiobutton(LbCheck, text='Sim', variable=CheckVariavel, value=1)
         self.CheckSim.place(x=10, y=0, width=59, height=20)
-        self.CheckNao = Radiobutton(LbCheck, text='Não', variable=self.CheckVariavel, value=0)
+        self.CheckNao = Radiobutton(LbCheck, text='Não', variable=CheckVariavel, value=0)
         self.CheckNao.place(x=80, y=0, width=59, height=20)
 
         # Data de entrada
@@ -383,7 +404,7 @@ class Home_Application():
         nome_get = self.EntryNome.get()
         telefone_get = self.EntryTelefone.get()
         placa_get = self.EntryPlaca.get()
-        exit_get = self.CheckVariavel.get()
+        exit_get = CheckVariavel.get()
 
         # Conectar-se ao banco de dados e inserir novos dados
         alt = bd.BD()
