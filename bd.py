@@ -74,7 +74,6 @@ def SlotDB():
     alt.execute_comand("""CREATE TABLE IF NOT EXISTS slot_table(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             id_veiculo INTEGER,
-            espaco_para INTEGER,
             vazio_ou_nao INTEGER
         )""")
     alt.persist()
@@ -96,8 +95,9 @@ def Slot_Disponivel():
     data = alt.fetchall_comand()
     alt.desconectar_BD()
     print(data)
+    print(len(data))
     if len(data) > 0:
-        return data[0]
+        return data[0][0]
     else:
         return False
 
@@ -105,4 +105,3 @@ InitDB()
 VeiculoDB()
 SlotDB()
 Slot_Space()
-Slot_Disponivel()
