@@ -1,3 +1,4 @@
+from datetime import date
 import sqlite3
 
 class BD():
@@ -61,7 +62,8 @@ def VeiculoDB():
             data_saida TEXT,
             exit INTEGER,
             criado_em TEXT,
-            atualizado_em TEXT
+            atualizado_em TEXT,
+            slot INTEGER UNIQUE
         )""")
     alt.persist()
     alt.desconectar_BD()
@@ -72,12 +74,35 @@ def SlotDB():
     alt.execute_comand("""CREATE TABLE IF NOT EXISTS slot_table(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             id_veiculo INTEGER,
-            vazio_ou_nao NUMERIC,
-            FOREIGN KEY(id_veiculo) REFERENCES veiculo_table(id)
+            espaco_para INTEGER,
+            vazio_ou_nao INTEGER
         )""")
     alt.persist()
     alt.desconectar_BD()
 
+def Slot_Space():
+    alt = BD()
+    alt.conn_bd()
+    alt.execute_comand("SELECT * FROM slot_table")
+    data = alt.fetchall_comand()
+    alt.desconectar_BD()
+    print(data)
+    return data
+
+def Slot_Disponivel():
+    alt = BD()
+    alt.conn_bd()
+    alt.execute_comand("SELECT * FROM slot_table WHERE vazio_ou_nao = '1'")
+    data = alt.fetchall_comand()
+    alt.desconectar_BD()
+    print(data)
+    if len(data) > 0:
+        return data[0][0]
+    else:
+        return False
+
 InitDB()
 VeiculoDB()
 SlotDB()
+Slot_Space()
+Slot_Disponivel()
