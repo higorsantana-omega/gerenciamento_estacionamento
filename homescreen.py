@@ -58,6 +58,8 @@ class Home_Application():
 
     # Tela home
     def inicio(self):
+        alt = bd.Slot_Space()
+
         # Cor dos slots
         green = '#5FED42'
         # Verificação de menu
@@ -77,71 +79,21 @@ class Home_Application():
         self.FrInicio.configure(relief='groove', borderwidth="2",  height=325, width=776)
 
         # Slots
-        global bg1
-        bg1 = 'green'
-        self.Slot1 = Frame(self.FrInicio)
-        self.Slot1.place(relx=0.026, rely=0.062)
-        self.Slot1.configure(relief='groove', borderwidth="2", width=125, height=75, bg=bg1)
-        global Slot1_Dispo
-        Slot1_Dispo = 0
+        row = 70
+        j = 0
+        for data in alt:
+            slot = Frame(root)
+            if data[2] == 1:
+                slot.configure(bg='red', relief='groove', borderwidth="2", width=125, height=75)
+            else:
+                slot.configure(bg='green', relief='groove', borderwidth="2", width=125, height=75)
 
-        self.Slot2 = Frame(self.FrInicio)
-        self.Slot2.place(relx=0.219, rely=0.062)
-        self.Slot2.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot3 = Frame(self.FrInicio)
-        self.Slot3.place(relx=0.412, rely=0.062)
-        self.Slot3.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot4 = Frame(self.FrInicio)
-        self.Slot4.place(relx=0.606, rely=0.062)
-        self.Slot4.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot5 = Frame(self.FrInicio)
-        self.Slot5.place(relx=0.799, rely=0.062)
-        self.Slot5.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot6 = Frame(self.FrInicio)
-        self.Slot6.place(relx=0.219, rely=0.369)
-        self.Slot6.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot7 = Frame(self.FrInicio)
-        self.Slot7.place(relx=0.412, rely=0.369)
-        self.Slot7.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot8 = Frame(self.FrInicio)
-        self.Slot8.place(relx=0.606, rely=0.369)
-        self.Slot8.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot9 = Frame(self.FrInicio)
-        self.Slot9.place(relx=0.799, rely=0.369)
-        self.Slot9.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot10 = Frame(self.FrInicio)
-        self.Slot10.place(relx=0.026, rely=0.369)
-        self.Slot10.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot11 = Frame(self.FrInicio)
-        self.Slot11.place(relx=0.026, rely=0.677)
-        self.Slot11.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot12 = Frame(self.FrInicio)
-        self.Slot12.place(relx=0.219, rely=0.677)
-        self.Slot12.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot13 = Frame(self.FrInicio)
-        self.Slot13.place(relx=0.412, rely=0.677)
-        self.Slot13.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot14 = Frame(self.FrInicio)
-        self.Slot14.place(relx=0.606, rely=0.677)
-        self.Slot14.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-        self.Slot15 = Frame(self.FrInicio)
-        self.Slot15.place(relx=0.799, rely=0.677)
-        self.Slot15.configure(relief='groove', borderwidth="2", width=125, height=75, bg=green)
-
-
+            if j == 625:
+                j = 0
+                row += 110
+            
+            slot.place(x=j, y=row)
+            j += 125
 
     # Tela adicionar veiculo
     def add_veiculo(self):
@@ -295,6 +247,9 @@ class Home_Application():
             alt.desconectar_BD()
             print('deu')
             # Deletar as entrys após dar commit no banco de dados
+            self.EntryAdd_Nome.delete(0, 'end')
+            self.EntryAdd_ID.delete(0, 'end')
+            self.EntryAdd_Telefone.delete(0, 'end')
             self.EntryAdd_Nome.delete(0, 'end')
             self.EntryAdd_ID.delete(0, 'end')
             self.EntryAdd_Telefone.delete(0, 'end')
