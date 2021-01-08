@@ -10,9 +10,7 @@ root = Tk()
 
 # Variaveis para verificar se está em algum menu
 verify_menu = None
-verify_menu_add = None
-verify_menu_manager = None
-verify_menu_history = None
+verify_where = 0
 
 CheckVariavel = IntVar()
 
@@ -63,15 +61,17 @@ class Home_Application():
         # Cor dos slots
         green = '#5FED42'
         # Verificação de menu
-        global verify_menu
-        global verify_menu_add
+        global verify_menu, verify_where
         verify_menu = True
-        print('Home criada')
-        if verify_menu_add == True:
-            self.FrAdd_Veiculo.destroy()
-            print('Add deletada')
-        else:
-            pass
+        verify_where = 1
+        print('--- Inicio veiculo criada ---')
+        if verify_menu == True:
+            if verify_where == 4:
+                self.FrAdd_Veiculo.destroy()
+            if verify_where == 2:
+                self.FrManager_Veiculo.destroy()
+            if verify_where == 3:
+                self.FrHistory_Veiculo.destroy()
 
         # Frames para os slots
         self.FrInicio = Frame(self.root)
@@ -79,35 +79,36 @@ class Home_Application():
         self.FrInicio.configure(relief='groove', borderwidth="2",  height=325, width=776)
 
         # Slots
-        row = 70
+        row = 80
         j = 0
         for data in alt:
-            slot = Frame(root)
+            self.slot = Frame(self.FrInicio)
             if data[2] == 1:
-                slot.configure(bg='red', relief='groove', borderwidth="2", width=125, height=75)
+                self.slot.configure(bg='red', relief='groove', borderwidth="2", width=125, height=75)
             else:
-                slot.configure(bg='green', relief='groove', borderwidth="2", width=125, height=75)
+                self.slot.configure(bg='green', relief='groove', borderwidth="2", width=125, height=75)
 
             if j == 625:
                 j = 0
                 row += 110
             
-            slot.place(x=j, y=row)
+            self.slot.place(x=j, y=row)
             j += 125
 
     # Tela adicionar veiculo
     def add_veiculo(self):
-        # Verificação do menu
-        global verify_menu
-        global verify_menu_add
-        print('Add criada')
+        # Verificação de menu
+        global verify_menu, verify_where
+        verify_menu = True
+        print('--- Adicionar veiculo criada ---')
         if verify_menu == True:
-            self.FrInicio.destroy()
-            verify_menu_add = True
-            print('Home deletada')
-        else:
-            pass
-
+            if verify_where == 1:
+                self.FrInicio.destroy()
+            if verify_where == 2:
+                self.FrManager_Veiculo.destroy()
+            if verify_where == 3:
+                self.FrHistory_Veiculo.destroy()
+            
         # Frames e Entrys
         self.FrAdd_Veiculo = Frame(self.root)
         self.FrAdd_Veiculo.place(relx=0.013, rely=0.175)
@@ -138,18 +139,18 @@ class Home_Application():
 
     # Tela gerenciar veiculos
     def manager_veiculo(self):
-        # Verificação do menu
-        global verify_menu
-        global verify_menu_add
-        global verify_menu_manager
-        print('Manager criada')
-        if verify_menu == True or verify_menu_add == True:
-            self.FrInicio.destroy()
-            self.FrAdd_Veiculo.destroy()
-            verify_menu_manager = True
-            print('Home & Add deletada')
-        else:
-            pass
+        # Verificação de menu
+        global verify_menu, verify_where
+        verify_menu = True
+        verify_where = 2
+        print('--- Manager veiculo criada ---')
+        if verify_menu == True:
+            if verify_where == 4:
+                self.FrAdd_Veiculo.destroy()
+            if verify_where == 1:
+                self.FrInicio.destroy()
+            if verify_where == 3:
+                self.FrHistory_Veiculo.destroy()
 
         # Frame
         self.FrManager_Veiculo = Frame(self.root)
@@ -183,20 +184,18 @@ class Home_Application():
 
     # Tela historico dos veiculos
     def historico_veiculo(self):
-        # Verificação do menu
-        global verify_menu
-        global verify_menu_add
-        global verify_menu_manager
-        global verify_menu_history
-        print('History criada')
-        if verify_menu == True or verify_menu_add == True or verify_menu_manager == True:
-            self.FrInicio.destroy()
-            self.FrAdd_Veiculo.destroy()
-            self.FrManager_Veiculo.destroy()
-            verify_menu_history= True
-            print('Home & Add & History deletada')
-        else:
-            pass
+        # Verificação de menu
+        global verify_menu, verify_where
+        verify_menu = True
+        verify_where = 3
+        print('--- Historico veiculo criada ---')
+        if verify_menu == True:
+            if verify_where == 4:
+                self.FrAdd_Veiculo.destroy()
+            if verify_where == 2:
+                self.FrManager_Veiculo.destroy()
+            if verify_where == 1:
+                self.FrInicio.destroy()
 
         # Frame
         self.FrHistory_Veiculo = Frame(self.root)
@@ -242,7 +241,7 @@ class Home_Application():
             alt.conn_bd()
             alt.execute_comand("INSERT INTO veiculo_table (nome, telefone, placa, data_entrada, exit, criado_em) values (?, ?, ?, ?, ?, ?)", (self.nome, self.placa, self.telefone, self.data_entrada, exit_veiculo, self.data_entrada))
             alt.persist()
-            alt.execute_comand("UPDATE slot_table SET id_veiculo=?, vazio_ou_nao='0' WHERE id = ?", (self.placa, str(spacid)))
+            alt.execute_comand("UPDATE slot_table SET id_veiculo=?, vazio_ou_nao='1' WHERE id = ?", (self.placa, str(spacid)))
             alt.persist()
             alt.desconectar_BD()
             print('deu')
